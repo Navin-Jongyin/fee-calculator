@@ -1,212 +1,385 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>เครื่องคิดเลขค่าธรรมเนียมหุ้น</title>
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #f5f7fa;
-        padding: 20px;
-        display: flex;
-        justify-content: center;
-    }
-    .calculator {
-        background: #fff;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        max-width: 500px;
-        width: 100%;
-    }
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-    }
-    label {
-        display: block;
-        margin-top: 15px;
-        font-weight: bold;
-        color: #555;
-    }
-    input, select {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-    }
-    button {
-        margin-top: 20px;
-        width: 100%;
-        padding: 12px;
-        background-color: #4f46e5;
-        color: white;
-        font-size: 1.1rem;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    button:hover {
-        background-color: #4338ca;
-    }
-    .result {
-        margin-top: 20px;
-        background: #eef2ff;
-        padding: 15px;
-        border-radius: 10px;
-        line-height: 1.6;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องคิดเลขค่าธรรมเนียมหุ้น</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #a855f7;
+            --accent-color: #ec4899;
+            --text-color: #1f2937;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        .calculator-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, #4f46e5, #9333ea);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #4b5563;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background: var(--input-bg);
+            font-size: 1rem;
+            color: #1f2937;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 20px;
+        }
+
+        button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 5px solid var(--primary-color);
+            animation: fadeIn 0.5s ease-out;
+            display: none;
+        }
+
+        .result.visible {
+            display: block;
+        }
+
+        .result p {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .result p:last-child {
+            margin-bottom: 0;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #d1d5db;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .calculator-container {
+                padding: 25px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="calculator">
-    <h2>เครื่องคิดเลขค่าธรรมเนียมหุ้น</h2>
-    <label>ระบบ</label>
-    <select id="system">
-        <option value="gtm">Global Trade Master</option>
-        <option value="gi">Global Invest</option>
-    </select>
+    <div class="calculator-container">
+        <h2>Fee Calculator</h2>
 
-    <label>ตลาด</label>
-    <select id="market">
-        <option value="us">สหรัฐฯ</option>
-        <option value="hk">ฮ่องกง</option>
-        <option value="vn">เวียดนาม</option>
-    </select>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>System</label>
+                <select id="system">
+                    <option value="gtm">Global Trade Master</option>
+                    <option value="gi">Global Invest</option>
+                </select>
+            </div>
 
-    <label>ประเภท</label>
-    <select id="type">
-        <option value="stock">หุ้น</option>
-        <option value="etf">ETF</option>
-    </select>
+            <div class="form-group">
+                <label>Market</label>
+                <select id="market">
+                    <option value="us">United States (US)</option>
+                    <option value="hk">Hong Kong (HK)</option>
+                    <option value="vn">Vietnam (VN)</option>
+                </select>
+            </div>
+        </div>
 
-    <label>ราคา (Price)</label>
-    <input type="number" id="price" placeholder="กรอกราคาต่อหุ้น">
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Asset Type</label>
+                <select id="type">
+                    <option value="stock">Stock</option>
+                    <option value="etf">ETF</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Session</label>
+                <select id="session">
+                    <option value="normal">Normal Market</option>
+                    <option value="prepost">Pre/Post/Overnight</option>
+                </select>
+            </div>
+        </div>
 
-    <label>จำนวนหุ้น (Quantity)</label>
-    <input type="number" id="quantity" placeholder="กรอกจำนวนหุ้น">
+        <div class="form-group">
+            <label>Price per Share</label>
+            <input type="number" id="price" placeholder="e.g. 150.00" step="0.01">
+        </div>
 
-    <label>ช่วงเวลา (Market Session)</label>
-    <select id="session">
-        <option value="normal">Normal</option>
-        <option value="prepost">Pre/Post/Overnight</option>
-    </select>
+        <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" id="quantity" placeholder="e.g. 100">
+        </div>
 
-    <button onclick="calculate()">คำนวณค่าธรรมเนียม</button>
+        <button onclick="calculate()">Calculate Fee</button>
 
-    <div class="result" id="result"></div>
-</div>
+        <div class="result" id="result"></div>
+    </div>
 
-<script>
-function calculate() {
-    const system = document.getElementById("system").value;
-    const market = document.getElementById("market").value;
-    const type = document.getElementById("type").value;
-    const price = parseFloat(document.getElementById("price").value);
-    const quantity = parseFloat(document.getElementById("quantity").value);
-    const session = document.getElementById("session").value;
+    <script>
+        function calculate() {
+            const system = document.getElementById("system").value;
+            const market = document.getElementById("market").value;
+            const type = document.getElementById("type").value;
+            const price = parseFloat(document.getElementById("price").value);
+            const quantity = parseFloat(document.getElementById("quantity").value);
+            const session = document.getElementById("session").value;
 
-    if (!price || !quantity) {
-        alert("กรุณากรอก ราคา และ จำนวนหุ้น ให้ครบ");
-        return;
-    }
+            const resultDiv = document.getElementById("result");
 
-    let orderValue = price * quantity;
-    let fee = 0;
-    let minFee = 0;
-    let details = [];
-    let vat = 0;
-
-    // คำนวณค่าธรรมเนียมหลัก
-    if(system === "gtm") {
-        if(market === "us") {
-            fee = 0.08 * quantity; // 8 cents per share
-            if(quantity < 1) fee = 1; // Fractional share
-            minFee = 3;
-            fee = Math.max(fee, minFee);
-            details.push(`ค่าธรรมเนียมหลัก: $${fee.toFixed(2)}`);
-            if(session === "prepost") {
-                let ecnFee = 0.001 * quantity;
-                details.push(`ECN Fee (Pre/Post/Overnight): $${ecnFee.toFixed(2)}`);
-                fee += ecnFee;
+            if (!price || !quantity) {
+                alert("Please enter both Price and Quantity.");
+                return;
             }
-            details.push(`VAT 7%: $${(fee*0.07).toFixed(2)}`);
-        } else if(market === "hk") {
-            fee = 0.002 * orderValue; // 0.2%
-            minFee = 50;
-            fee = Math.max(fee, minFee);
-            details.push(`ค่าธรรมเนียมหลัก: HK$${fee.toFixed(2)}`);
-            if(type === "stock") {
-                let stamp = 0.001 * orderValue;
-                details.push(`Stamp Duty: HK$${stamp.toFixed(2)}`);
-                fee += stamp;
+
+            let orderValue = price * quantity;
+            let details = [];
+
+            if (system === "gtm") {
+                if (market === "us") {
+                    let fee = Math.max(0.08 * quantity, 3);
+                    if (quantity < 1) fee = 1;
+
+                    details.push(`<p><span>Main Fee</span> <span>$${fee.toFixed(2)}</span></p>`);
+
+                    if (session === "prepost") {
+                        let ecnFee = 0.001 * quantity;
+                        details.push(`<p><span>ECN Fee</span> <span>$${ecnFee.toFixed(2)}</span></p>`);
+                        fee += ecnFee;
+                    }
+                    details.push(`<p><span>VAT 7%</span> <span>$${(fee * 0.07).toFixed(2)}</span></p>`);
+
+                } else if (market === "hk") {
+                    let commission = Math.max(0.002 * orderValue, 50);
+                    details.push(`<p><span>Main Fee</span> <span>HK$${commission.toFixed(2)}</span></p>`);
+
+                    let others = 0;
+                    if (type === "stock") {
+                        let stamp = 0.001 * orderValue;
+                        others += stamp;
+                        details.push(`<p><span>Stamp Duty</span> <span>HK$${stamp.toFixed(2)}</span></p>`);
+                    }
+
+                    let exchangeFee = 0.000085 * orderValue;
+                    let settlementFee = 0.000042 * orderValue;
+                    others += exchangeFee + settlementFee;
+
+                    details.push(`<p><span>Exchange Fee</span> <span>HK$${exchangeFee.toFixed(2)}</span></p>`);
+                    details.push(`<p><span>Settlement Fee</span> <span>HK$${settlementFee.toFixed(2)}</span></p>`);
+
+                    let totalFee = commission + others;
+                    details.push(`<p><span>VAT 7%</span> <span>HK$${(totalFee * 0.07).toFixed(2)}</span></p>`);
+
+                } else if (market === "vn") {
+                    let commission = Math.max(0.004 * orderValue, 300000);
+                    details.push(`<p><span>Main Fee</span> <span>VND ${commission.toFixed(0)}</span></p>`);
+
+                    let others = 0;
+                    if (type === "stock") {
+                        let tax = 0.001 * orderValue;
+                        others += tax;
+                        details.push(`<p><span>Selling Tax</span> <span>VND ${tax.toFixed(0)}</span></p>`);
+                    }
+
+                    let trans = 0.0003 * orderValue;
+                    others += trans;
+                    details.push(`<p><span>Transaction Fee</span> <span>VND ${trans.toFixed(0)}</span></p>`);
+
+                    let totalFee = commission + others;
+                    details.push(`<p><span>VAT 7%</span> <span>VND ${(totalFee * 0.07).toFixed(0)}</span></p>`);
+                }
+
+            } else if (system === "gi") {
+                if (market === "us") {
+                    let mainFee = Math.max(0.08 * quantity, 10);
+                    details.push(`<p><span>Main Fee</span> <span>$${mainFee.toFixed(2)}</span></p>`);
+                    details.push(`<p><span>VAT 7%</span> <span>$${(mainFee * 0.07).toFixed(2)}</span></p>`);
+
+                } else if (market === "hk") {
+                    let mainFee = Math.max(0.002 * orderValue, 150);
+                    details.push(`<p><span>Main Fee</span> <span>HK$${mainFee.toFixed(2)}</span></p>`);
+
+                    let others = 0;
+                    if (type === "stock") {
+                        let stamp = 0.001 * orderValue;
+                        others += stamp;
+                        details.push(`<p><span>Stamp Duty</span> <span>HK$${stamp.toFixed(2)}</span></p>`);
+                    }
+
+                    let ex = 0.000085 * orderValue;
+                    others += ex;
+                    details.push(`<p><span>Exchange Fee</span> <span>HK$${ex.toFixed(2)}</span></p>`);
+
+                    let totalFee = mainFee + others;
+                    details.push(`<p><span>VAT 7%</span> <span>HK$${(totalFee * 0.07).toFixed(2)}</span></p>`);
+
+                } else if (market === "vn") {
+                    let mainFee = 0.0045 * orderValue;
+                    details.push(`<p><span>Main Fee</span> <span>VND ${mainFee.toFixed(0)}</span></p>`);
+
+                    let others = 0;
+                    if (type === "stock") {
+                        let tax = 0.001 * orderValue;
+                        others += tax;
+                        details.push(`<p><span>Selling Tax</span> <span>VND ${tax.toFixed(0)}</span></p>`);
+                    }
+
+                    let trans = 0.0003 * orderValue;
+                    others += trans;
+                    details.push(`<p><span>Transaction Fee</span> <span>VND ${trans.toFixed(0)}</span></p>`);
+
+                    let totalFee = mainFee + others;
+                    details.push(`<p><span>VAT 7%</span> <span>VND ${(totalFee * 0.07).toFixed(0)}</span></p>`);
+                }
             }
-            let exchangeFee = 0.000085 * orderValue;
-            let settlementFee = 0.000042 * orderValue;
-            details.push(`Exchange Fee: HK$${exchangeFee.toFixed(2)}`);
-            details.push(`Stock Settlement Fee: HK$${settlementFee.toFixed(2)}`);
-            fee += exchangeFee + settlementFee;
-            details.push(`VAT 7%: HK$${(Math.max(fee,minFee)*0.07).toFixed(2)}`);
-        } else if(market === "vn") {
-            fee = 0.004 * orderValue; // 0.4%
-            minFee = 300000;
-            fee = Math.max(fee, minFee);
-            details.push(`ค่าธรรมเนียมหลัก: VND ${fee.toFixed(0)}`);
-            if(type === "stock") {
-                let tax = 0.001 * orderValue;
-                details.push(`Selling Tax: VND ${tax.toFixed(0)}`);
-                fee += tax;
-            }
-            let transactionFee = 0.0003 * orderValue;
-            details.push(`Transaction Fee: VND ${transactionFee.toFixed(0)}`);
-            fee += transactionFee;
-            details.push(`VAT 7%: VND ${(Math.max(fee,minFee)*0.07).toFixed(0)}`);
+
+            resultDiv.innerHTML = details.join("");
+            resultDiv.classList.add('visible');
         }
-    } else if(system === "gi") {
-        if(market === "us") {
-            fee = 0.08 * quantity;
-            minFee = 10;
-            fee = Math.max(fee, minFee);
-            details.push(`ค่าธรรมเนียมหลัก: $${fee.toFixed(2)}`);
-            details.push(`VAT 7%: $${(fee*0.07).toFixed(2)}`);
-        } else if(market === "hk") {
-            fee = 0.002 * orderValue;
-            minFee = 150;
-            fee = Math.max(fee, minFee);
-            details.push(`ค่าธรรมเนียมหลัก: HK$${fee.toFixed(2)}`);
-            if(type === "stock") {
-                let stamp = 0.001 * orderValue;
-                details.push(`Stamp Duty: HK$${stamp.toFixed(2)}`);
-                fee += stamp;
-            }
-            let exchangeFee = 0.000085 * orderValue;
-            details.push(`Exchange Fee: HK$${exchangeFee.toFixed(2)}`);
-            fee += exchangeFee;
-            details.push(`VAT 7%: HK$${(Math.max(fee,minFee)*0.07).toFixed(2)}`);
-        } else if(market === "vn") {
-            fee = 0.0045 * orderValue;
-            details.push(`ค่าธรรมเนียมหลัก: VND ${fee.toFixed(0)}`);
-            if(type === "stock") {
-                let tax = 0.001 * orderValue;
-                details.push(`Selling Tax: VND ${tax.toFixed(0)}`);
-                fee += tax;
-            }
-            let transactionFee = 0.0003 * orderValue;
-            details.push(`Transaction Fee: VND ${transactionFee.toFixed(0)}`);
-            fee += transactionFee;
-            details.push(`VAT 7%: VND ${(fee*0.07).toFixed(0)}`);
-        }
-    }
-
-    document.getElementById("result").innerHTML = details.join("<br>");
-}
-</script>
+    </script>
 
 </body>
+
 </html>
