@@ -17,9 +17,9 @@
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(255, 255, 255, 0.4);
-            --input-bg: rgba(255, 255, 255, 0.9);
             --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
-            --radius: 16px;
+            --fee-bg: #f9fafb;
+            --fee-border: #e5e7eb;
         }
 
         * {
@@ -43,7 +43,7 @@
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             padding: 40px;
             border-radius: 24px;
             box-shadow: var(--shadow-lg);
@@ -93,7 +93,7 @@
             padding: 12px 16px;
             border-radius: 12px;
             border: 2px solid transparent;
-            background: var(--input-bg);
+            background: #f9fafb;
             font-size: 1rem;
             color: #1f2937;
             font-family: inherit;
@@ -119,7 +119,7 @@
 
         button {
             margin-top: 10px;
-            width: 100%;
+            width: 48%;
             padding: 14px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
@@ -143,10 +143,10 @@
 
         .result {
             margin-top: 30px;
-            background: #f3f4f6;
+            background: var(--fee-bg);
             padding: 20px;
             border-radius: 16px;
-            border-left: 5px solid var(--primary-color);
+            border: 1px solid var(--fee-border);
             animation: fadeIn 0.5s ease-out;
             display: none;
         }
@@ -155,21 +155,36 @@
             display: block;
         }
 
-        .result p {
-            margin-bottom: 8px;
-            font-size: 1rem;
+        .fee-item {
             display: flex;
             justify-content: space-between;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            background: white;
+            border-left: 5px solid var(--primary-color);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            font-size: 0.97rem;
         }
 
-        .result p:last-child {
-            margin-bottom: 0;
+        .fee-item.highlight {
+            border-left-color: var(--accent-color);
+            background: #fff0f6;
+        }
+
+        .fee-item.total {
             font-weight: 700;
-            color: var(--primary-color);
-            font-size: 1.1rem;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px dashed #d1d5db;
+            font-size: 1.05rem;
+            border-left-color: var(--secondary-color);
+            background: #f0f4ff;
+        }
+
+        .fee-item span.value {
+            font-weight: 700;
+        }
+
+        .fee-item span.desc {
+            font-weight: normal;
         }
 
         @keyframes fadeIn {
@@ -197,6 +212,10 @@
 
             .calculator-container {
                 padding: 25px;
+            }
+
+            button {
+                width: 100%;
             }
         }
     </style>
@@ -253,20 +272,43 @@
             <input type="number" id="quantity" placeholder="e.g. 100">
         </div>
 
-        <button onclick="calculate()">Calculate Fee</button>
+        <div class="grid-2">
+            <button onclick="calculate('buy')">Buy</button>
+            <button onclick="calculate('sell')">Sell</button>
+        </div>
 
         <div class="result" id="result"></div>
     </div>
 
     <script>
-        function calculate() {
+        const marketSelect = document.getElementById("market");
+        const sessionSelect = document.getElementById("session");
+
+        function updateSessionOptions() {
+            const market = marketSelect.value;
+            for (let i = 0; i < sessionSelect.options.length; i++) {
+                sessionSelect.options[i].disabled = false;
+            }
+            if (market === "hk" || market === "vn") {
+                for (let i = 0; i < sessionSelect.options.length; i++) {
+                    if (sessionSelect.options[i].value === "prepost") {
+                        sessionSelect.options[i].disabled = true;
+                    }
+                }
+                sessionSelect.value = "normal";
+            }
+        }
+
+        marketSelect.addEventListener("change", updateSessionOptions);
+        window.addEventListener("load", updateSessionOptions);
+
+        function calculate(action) {
             const system = document.getElementById("system").value;
             const market = document.getElementById("market").value;
             const type = document.getElementById("type").value;
             const price = parseFloat(document.getElementById("price").value);
             const quantity = parseFloat(document.getElementById("quantity").value);
             const session = document.getElementById("session").value;
-
             const resultDiv = document.getElementById("result");
 
             if (!price || !quantity) {
@@ -274,106 +316,112 @@
                 return;
             }
 
-            let orderValue = price * quantity;
+            const orderValue = price * quantity;
+            let totalFee = 0;
             let details = [];
 
-            if (system === "gtm") {
-                if (market === "us") {
-                    let fee = Math.max(0.08 * quantity, 3);
-                    if (quantity < 1) fee = 1;
+            function createItem(label, value, highlight = false, isTotal = false) {
+                const match = value.match(/^([^\(]+)(.*)$/);
+                let numPart = match ? match[1].trim() : value;
+                let descPart = match && match[2] ? match[2].trim() : '';
+                return `<div class="fee-item${highlight ? ' highlight' : ''}${isTotal ? ' total' : ''}">
+                            <span>${label}</span>
+                            <span class="value">${numPart} <span class="desc">${descPart}</span></span>
+                        </div>`;
+            }
 
-                    details.push(`<p><span>Main Fee</span> <span>$${fee.toFixed(2)}</span></p>`);
-
-                    if (session === "prepost") {
-                        let ecnFee = 0.001 * quantity;
-                        details.push(`<p><span>ECN Fee</span> <span>$${ecnFee.toFixed(2)}</span></p>`);
-                        fee += ecnFee;
+            // --- US ---
+            if (market === "us") {
+                let fee;
+                let minFeeApplied = false;
+                if (system === "gtm") {
+                    if (quantity < 1) {
+                        fee = 1;
+                    } else {
+                        fee = Math.max(0.08 * quantity, 3);
+                        minFeeApplied = fee === 3;
                     }
-                    details.push(`<p><span>VAT 7%</span> <span>$${(fee * 0.07).toFixed(2)}</span></p>`);
+                } else {
+                    fee = Math.max(0.08 * quantity, 10);
+                    minFeeApplied = fee === 10;
+                }
+                totalFee += fee;
+                details.push(createItem("Main Fee", `$${fee.toFixed(2)} (0.08 USD per share${minFeeApplied ? ', ติด Min Fee' : ''})`));
 
-                } else if (market === "hk") {
-                    let commission = Math.max(0.002 * orderValue, 50);
-                    details.push(`<p><span>Main Fee</span> <span>HK$${commission.toFixed(2)}</span></p>`);
-
-                    let others = 0;
-                    if (type === "stock") {
-                        let stamp = 0.001 * orderValue;
-                        others += stamp;
-                        details.push(`<p><span>Stamp Duty</span> <span>HK$${stamp.toFixed(2)}</span></p>`);
-                    }
-
-                    let exchangeFee = 0.000085 * orderValue;
-                    let settlementFee = 0.000042 * orderValue;
-                    others += exchangeFee + settlementFee;
-
-                    details.push(`<p><span>Exchange Fee</span> <span>HK$${exchangeFee.toFixed(2)}</span></p>`);
-                    details.push(`<p><span>Settlement Fee</span> <span>HK$${settlementFee.toFixed(2)}</span></p>`);
-
-                    let totalFee = commission + others;
-                    details.push(`<p><span>VAT 7%</span> <span>HK$${(totalFee * 0.07).toFixed(2)}</span></p>`);
-
-                } else if (market === "vn") {
-                    let commission = Math.max(0.004 * orderValue, 300000);
-                    details.push(`<p><span>Main Fee</span> <span>VND ${commission.toFixed(0)}</span></p>`);
-
-                    let others = 0;
-                    if (type === "stock") {
-                        let tax = 0.001 * orderValue;
-                        others += tax;
-                        details.push(`<p><span>Selling Tax</span> <span>VND ${tax.toFixed(0)}</span></p>`);
-                    }
-
-                    let trans = 0.0003 * orderValue;
-                    others += trans;
-                    details.push(`<p><span>Transaction Fee</span> <span>VND ${trans.toFixed(0)}</span></p>`);
-
-                    let totalFee = commission + others;
-                    details.push(`<p><span>VAT 7%</span> <span>VND ${(totalFee * 0.07).toFixed(0)}</span></p>`);
+                if (session === "prepost" && system === "gtm") {
+                    let ecnFee = 0.001 * quantity;
+                    totalFee += ecnFee;
+                    details.push(createItem("Trading Fee (ECN Fee)", `$${ecnFee.toFixed(2)} (0.001 USD per share for Pre/Post/Overnight)`, true));
                 }
 
-            } else if (system === "gi") {
-                if (market === "us") {
-                    let mainFee = Math.max(0.08 * quantity, 10);
-                    details.push(`<p><span>Main Fee</span> <span>$${mainFee.toFixed(2)}</span></p>`);
-                    details.push(`<p><span>VAT 7%</span> <span>$${(mainFee * 0.07).toFixed(2)}</span></p>`);
+                if (action === "sell" && system === "gtm") {
+                    let taf = 0.0195 * quantity;
+                    totalFee += taf;
+                    details.push(createItem("TAF Fee", `$${taf.toFixed(2)} (0.0195 USD per share)`));
+                }
 
-                } else if (market === "hk") {
-                    let mainFee = Math.max(0.002 * orderValue, 150);
-                    details.push(`<p><span>Main Fee</span> <span>HK$${mainFee.toFixed(2)}</span></p>`);
+                let vat = fee * 0.07;
+                totalFee += vat;
+                details.push(createItem("VAT 7%", `$${vat.toFixed(2)} (7% on main fee)`));
+            }
 
-                    let others = 0;
-                    if (type === "stock") {
-                        let stamp = 0.001 * orderValue;
-                        others += stamp;
-                        details.push(`<p><span>Stamp Duty</span> <span>HK$${stamp.toFixed(2)}</span></p>`);
-                    }
+            // --- HK ---
+            else if (market === "hk") {
+                let minFee = system === "gtm" ? 50 : 150;
+                let rate = 0.002;
+                let commission = Math.max(orderValue * rate, minFee);
+                let minFeeApplied = commission === minFee;
+                totalFee += commission;
+                let vat = commission * 0.07;
+                totalFee += vat;
 
-                    let ex = 0.000085 * orderValue;
-                    others += ex;
-                    details.push(`<p><span>Exchange Fee</span> <span>HK$${ex.toFixed(2)}</span></p>`);
+                details.push(createItem("Main Fee", `HK$${commission.toFixed(2)} (${(rate*100).toFixed(2)}% of order value, min ${minFee} HKD${minFeeApplied ? ', ติด Min Fee' : ''})`));
+                details.push(createItem("VAT 7%", `HK$${vat.toFixed(2)} (7% on main fee/min fee)`));
 
-                    let totalFee = mainFee + others;
-                    details.push(`<p><span>VAT 7%</span> <span>HK$${(totalFee * 0.07).toFixed(2)}</span></p>`);
+                if (type === "stock") {
+                    let stamp = 0.001 * orderValue;
+                    totalFee += stamp;
+                    details.push(createItem("Stamp Duty", `HK$${stamp.toFixed(2)} (0.1% of order value)`));
+                }
 
-                } else if (market === "vn") {
-                    let mainFee = 0.0045 * orderValue;
-                    details.push(`<p><span>Main Fee</span> <span>VND ${mainFee.toFixed(0)}</span></p>`);
+                let exchangeFee = 0.000085 * orderValue;
+                totalFee += exchangeFee;
+                details.push(createItem("Exchange Fee", `HK$${exchangeFee.toFixed(2)} (0.0085% of order value)`));
 
-                    let others = 0;
-                    if (type === "stock") {
-                        let tax = 0.001 * orderValue;
-                        others += tax;
-                        details.push(`<p><span>Selling Tax</span> <span>VND ${tax.toFixed(0)}</span></p>`);
-                    }
-
-                    let trans = 0.0003 * orderValue;
-                    others += trans;
-                    details.push(`<p><span>Transaction Fee</span> <span>VND ${trans.toFixed(0)}</span></p>`);
-
-                    let totalFee = mainFee + others;
-                    details.push(`<p><span>VAT 7%</span> <span>VND ${(totalFee * 0.07).toFixed(0)}</span></p>`);
+                if (system === "gtm") {
+                    let settlementFee = 0.000042 * orderValue;
+                    totalFee += settlementFee;
+                    details.push(createItem("Stock Settlement Fee", `HK$${settlementFee.toFixed(2)} (0.0042% of order value)`));
                 }
             }
+
+            // --- Vietnam ---
+            else if (market === "vn") {
+                let commission = system === "gtm" ? Math.max(0.004 * orderValue, 300000) : 0.0045 * orderValue;
+                let minFeeApplied = system === "gtm" && commission === 300000;
+                totalFee += commission;
+                details.push(createItem("Main Fee", `VND ${commission.toFixed(0)} (${(commission/orderValue*100).toFixed(2)}% of order value${minFeeApplied ? ', ติด Min Fee' : ''})`));
+
+                let others = 0;
+                if (type === "stock" && action === "sell") {
+                    let tax = 0.001 * orderValue;
+                    others += tax;
+                    details.push(createItem("Selling Tax", `VND ${tax.toFixed(0)} (0.1% of order value)`, true));
+                }
+                let trans = 0.0003 * orderValue;
+                others += trans;
+                details.push(createItem("Transaction Fee", `VND ${trans.toFixed(0)} (0.03% of order value)`));
+
+                totalFee += others;
+                let vat = commission * 0.07;
+                totalFee += vat;
+                details.push(createItem("VAT 7%", `VND ${vat.toFixed(0)} (7% on main fee)`));
+            }
+
+            details.unshift(createItem("Order Value", `${market === 'vn' ? 'VND ' : market==='hk' ? 'HK$' : '$'}${orderValue.toLocaleString()}`));
+
+            let finalTotal = action === 'buy' ? orderValue + totalFee : orderValue - totalFee;
+            details.push(createItem(`Total ${action === 'buy' ? 'Cost' : 'Proceeds'}`, `${market === 'vn' ? 'VND ' : market==='hk' ? 'HK$' : '$'}${finalTotal.toLocaleString()}`, true, true));
 
             resultDiv.innerHTML = details.join("");
             resultDiv.classList.add('visible');
@@ -382,5 +430,5 @@
 
 </body>
 
-
 </html>
+
