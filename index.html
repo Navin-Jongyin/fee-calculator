@@ -10,15 +10,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #6366f1;
-            --secondary-color: #a855f7;
-            --accent-color: #ec4899;
+            --primary-color: #BE0F34;
+            --secondary-color: #002D62;
+            --accent-color: #D61858;
             --text-color: #1f2937;
-            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
-            --fee-bg: #f9fafb;
+            --bg-gradient: var(--secondary-color);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            --fee-bg: #FFFFFF;
             --fee-border: #e5e7eb;
         }
 
@@ -60,7 +60,7 @@
             left: 0;
             right: 0;
             height: 6px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background: var(--primary-color);
         }
 
         h2 {
@@ -68,10 +68,7 @@
             margin-bottom: 30px;
             font-weight: 700;
             font-size: 1.8rem;
-            background: linear-gradient(to right, #4f46e5, #9333ea);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--secondary-color);
             letter-spacing: -0.5px;
         }
 
@@ -105,7 +102,7 @@
         select:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 0 0 3px rgba(190, 15, 52, 0.2);
         }
 
         select {
@@ -121,7 +118,7 @@
             margin-top: 10px;
             width: 48%;
             padding: 14px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: var(--primary-color);
             color: white;
             font-size: 1.1rem;
             font-weight: 600;
@@ -129,12 +126,12 @@
             border-radius: 12px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 4px 12px rgba(190, 15, 52, 0.3);
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+            box-shadow: 0 8px 20px rgba(190, 15, 52, 0.4);
         }
 
         button:active {
@@ -375,7 +372,7 @@
                 let vat = commission * 0.07;
                 totalFee += vat;
 
-                details.push(createItem("Main Fee", `HK$${commission.toFixed(2)} (${(rate*100).toFixed(2)}% of order value, min ${minFee} HKD${minFeeApplied ? ', ติด Min Fee' : ''})`));
+                details.push(createItem("Main Fee", `HK$${commission.toFixed(2)} (${(rate * 100).toFixed(2)}% of order value, min ${minFee} HKD${minFeeApplied ? ', ติด Min Fee' : ''})`));
                 details.push(createItem("VAT 7%", `HK$${vat.toFixed(2)} (7% on main fee/min fee)`));
 
                 if (type === "stock") {
@@ -400,7 +397,7 @@
                 let commission = system === "gtm" ? Math.max(0.004 * orderValue, 300000) : 0.0045 * orderValue;
                 let minFeeApplied = system === "gtm" && commission === 300000;
                 totalFee += commission;
-                details.push(createItem("Main Fee", `VND ${commission.toFixed(0)} (${(commission/orderValue*100).toFixed(2)}% of order value${minFeeApplied ? ', ติด Min Fee' : ''})`));
+                details.push(createItem("Main Fee", `VND ${commission.toFixed(0)} (${(commission / orderValue * 100).toFixed(2)}% of order value${minFeeApplied ? ', ติด Min Fee' : ''})`));
 
                 let others = 0;
                 if (type === "stock" && action === "sell") {
@@ -418,10 +415,10 @@
                 details.push(createItem("VAT 7%", `VND ${vat.toFixed(0)} (7% on main fee)`));
             }
 
-            details.unshift(createItem("Order Value", `${market === 'vn' ? 'VND ' : market==='hk' ? 'HK$' : '$'}${orderValue.toLocaleString()}`));
+            details.unshift(createItem("Order Value", `${market === 'vn' ? 'VND ' : market === 'hk' ? 'HK$' : '$'}${orderValue.toLocaleString()}`));
 
             let finalTotal = action === 'buy' ? orderValue + totalFee : orderValue - totalFee;
-            details.push(createItem(`Total ${action === 'buy' ? 'Cost' : 'Proceeds'}`, `${market === 'vn' ? 'VND ' : market==='hk' ? 'HK$' : '$'}${finalTotal.toLocaleString()}`, true, true));
+            details.push(createItem(`Total ${action === 'buy' ? 'Cost' : 'Proceeds'}`, `${market === 'vn' ? 'VND ' : market === 'hk' ? 'HK$' : '$'}${finalTotal.toLocaleString()}`, true, true));
 
             resultDiv.innerHTML = details.join("");
             resultDiv.classList.add('visible');
@@ -431,4 +428,3 @@
 </body>
 
 </html>
-
