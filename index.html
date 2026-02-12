@@ -10,16 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #BE0F34;
-            --secondary-color: #002D62;
-            --accent-color: #D61858;
+            --primary-color: #1E90FF;
+            --secondary-color: #1E90FF;
+            --accent-color: #63b3ed;
             --text-color: #1f2937;
-            --bg-gradient: var(--secondary-color);
-            --glass-bg: rgba(255, 255, 255, 0.95);
-            --glass-border: rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            --bg-gradient: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+            --glass-bg: rgba(255, 255, 255, 0.90);
+            --glass-border: rgba(30, 144, 255, 0.1);
+            --shadow-lg: 0 10px 40px -10px rgba(30, 144, 255, 0.15);
             --fee-bg: #FFFFFF;
-            --fee-border: #e5e7eb;
+            --fee-border: #e6f2ff;
         }
 
         * {
@@ -102,7 +102,7 @@
         select:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(190, 15, 52, 0.2);
+            box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
         }
 
         select {
@@ -126,12 +126,12 @@
             border-radius: 12px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 12px rgba(190, 15, 52, 0.3);
+            box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3);
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(190, 15, 52, 0.4);
+            box-shadow: 0 8px 20px rgba(30, 144, 255, 0.4);
         }
 
         button:active {
@@ -166,7 +166,7 @@
 
         .fee-item.highlight {
             border-left-color: var(--accent-color);
-            background: #fff0f6;
+            background: #ebf8ff;
         }
 
         .fee-item.total {
