@@ -1,861 +1,1747 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 
-<html lang="th">
+ 
 
+<html lang="th"> 
 
+ 
 
-<head>
+ 
 
-    <meta charset="UTF-8">
+ 
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head> 
 
-    <title>เครื่องคิดเลขค่าธรรมเนียมหุ้นต่างประเทศ</title>
+ 
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <meta charset="UTF-8"> 
 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ 
 
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-    <style>
-        :root {
+ 
 
-            --primary-color: #1E90FF;
+    <title>เครื่องคิดเลขค่าธรรมเนียมหุ้นต่างประเทศ</title> 
 
-            --secondary-color: #1E90FF;
+ 
 
-            --accent-color: #63b3ed;
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
 
-            --text-color: #1f2937;
+ 
 
-            --bg-gradient: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
 
-            --glass-bg: rgba(255, 255, 255, 0.90);
+ 
 
-            --glass-border: rgba(30, 144, 255, 0.1);
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
 
-            --shadow-lg: 0 10px 40px -10px rgba(30, 144, 255, 0.15);
+ 
 
-            --fee-bg: #FFFFFF;
+    <style> 
 
-            --fee-border: #e6f2ff;
+        :root { 
 
-        }
+ 
 
+            --primary-color: #1E90FF; 
 
+ 
 
-        * {
+            --secondary-color: #1E90FF; 
 
-            box-sizing: border-box;
+ 
 
-            margin: 0;
+            --accent-color: #63b3ed; 
 
-            padding: 0;
+ 
 
-        }
+            --text-color: #1f2937; 
 
+ 
 
+            --bg-gradient: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%); 
 
-        body {
+ 
 
-            font-family: 'Outfit', sans-serif;
+            --glass-bg: rgba(255, 255, 255, 0.90); 
 
-            background: var(--bg-gradient);
+ 
 
-            min-height: 100vh;
+            --glass-border: rgba(30, 144, 255, 0.1); 
 
-            display: flex;
+ 
 
-            justify-content: center;
+            --shadow-lg: 0 10px 40px -10px rgba(30, 144, 255, 0.15); 
 
-            align-items: center;
+ 
 
-            padding: 20px;
+            --fee-bg: #FFFFFF; 
 
-            color: var(--text-color);
+ 
 
-        }
+            --fee-border: #e6f2ff; 
 
+ 
 
+        } 
 
-        .calculator-container {
+ 
 
-            background: var(--glass-bg);
+ 
 
-            backdrop-filter: blur(12px);
+ 
 
-            -webkit-backdrop-filter: blur(12px);
+        * { 
 
-            border: 1px solid rgba(255, 255, 255, 0.4);
+ 
 
-            padding: 40px;
+            box-sizing: border-box; 
 
-            border-radius: 24px;
+ 
 
-            box-shadow: var(--shadow-lg);
+            margin: 0; 
 
-            width: 100%;
+ 
 
-            max-width: 480px;
+            padding: 0; 
 
-            position: relative;
+ 
 
-            overflow: hidden;
+        } 
 
-        }
+ 
 
+ 
 
+ 
 
-        .calculator-container::before {
+        body { 
 
-            content: '';
+ 
 
-            position: absolute;
+            font-family: 'Outfit', sans-serif; 
 
-            top: 0;
+ 
 
-            left: 0;
+            background: var(--bg-gradient); 
 
-            right: 0;
+ 
 
-            height: 6px;
+            min-height: 100vh; 
 
-            background: var(--primary-color);
+ 
 
-        }
+            display: flex; 
 
+ 
 
+            justify-content: center; 
 
-        h2 {
+ 
 
-            text-align: center;
+            align-items: center; 
 
-            margin-bottom: 30px;
+ 
 
-            font-weight: 700;
+            padding: 20px; 
 
-            font-size: 1.8rem;
+ 
 
-            color: var(--secondary-color);
+            color: var(--text-color); 
 
-            letter-spacing: -0.5px;
+ 
 
-        }
+        } 
 
+ 
 
+ 
 
-        .form-group {
+ 
 
-            margin-bottom: 20px;
+        .calculator-container { 
 
-        }
+ 
 
+            background: var(--glass-bg); 
 
+ 
 
-        label {
+            backdrop-filter: blur(12px); 
 
-            display: block;
+ 
 
-            margin-bottom: 8px;
+            -webkit-backdrop-filter: blur(12px); 
 
-            font-weight: 500;
+ 
 
-            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.4); 
 
-            color: #4b5563;
+ 
 
-        }
+            padding: 40px; 
 
+ 
 
+            border-radius: 24px; 
 
-        input,
+ 
 
-        select {
+            box-shadow: var(--shadow-lg); 
 
-            width: 100%;
+ 
 
-            padding: 12px 16px;
+            width: 100%; 
 
-            border-radius: 12px;
+ 
 
-            border: 2px solid transparent;
+            max-width: 480px; 
 
-            background: #f9fafb;
+ 
 
-            font-size: 1rem;
+            position: relative; 
 
-            color: #1f2937;
+ 
 
-            font-family: inherit;
+            overflow: hidden; 
 
-            transition: all 0.3s ease;
+ 
 
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        } 
 
-        }
+ 
 
+ 
 
+ 
 
-        input:focus,
+        .calculator-container::before { 
 
-        select:focus {
+ 
 
-            outline: none;
+            content: ''; 
 
-            border-color: var(--primary-color);
+ 
 
-            box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+            position: absolute; 
 
-        }
+ 
 
+            top: 0; 
 
+ 
 
-        select {
+            left: 0; 
 
-            cursor: pointer;
+ 
 
-            appearance: none;
+            right: 0; 
 
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+ 
 
-            background-repeat: no-repeat;
+            height: 6px; 
 
-            background-position: right 16px center;
+ 
 
-            background-size: 20px;
+            background: var(--primary-color); 
 
-        }
+ 
 
+        } 
 
+ 
 
-        button {
+ 
 
-            margin-top: 10px;
+ 
 
-            width: 48%;
+        h2 { 
 
-            padding: 14px;
+ 
 
-            background: var(--primary-color);
+            text-align: center; 
 
-            color: white;
+ 
 
-            font-size: 1.1rem;
+            margin-bottom: 30px; 
 
-            font-weight: 600;
+ 
 
-            border: none;
+            font-weight: 700; 
 
-            border-radius: 12px;
+ 
 
-            cursor: pointer;
+            font-size: 1.8rem; 
 
-            transition: transform 0.2s, box-shadow 0.2s;
+ 
 
-            box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3);
+            color: var(--secondary-color); 
 
-        }
+ 
 
+            letter-spacing: -0.5px; 
 
+ 
 
-        button:hover {
+        } 
 
-            transform: translateY(-2px);
+ 
 
-            box-shadow: 0 8px 20px rgba(30, 144, 255, 0.4);
+ 
 
-        }
+ 
 
+        .form-group { 
 
+ 
 
-        button:active {
+            margin-bottom: 20px; 
 
-            transform: translateY(0);
+ 
 
-        }
+        } 
 
+ 
 
+ 
 
-        .result {
+ 
 
-            margin-top: 30px;
+        label { 
 
-            background: var(--fee-bg);
+ 
 
-            padding: 20px;
+            display: block; 
 
-            border-radius: 16px;
+ 
 
-            border: 1px solid var(--fee-border);
+            margin-bottom: 8px; 
 
-            animation: fadeIn 0.5s ease-out;
+ 
 
-            display: none;
+            font-weight: 500; 
 
-        }
+ 
 
+            font-size: 0.95rem; 
 
+ 
 
-        .result.visible {
+            color: #4b5563; 
 
-            display: block;
+ 
 
-        }
+        } 
 
+ 
 
+ 
 
-        .fee-item {
+ 
 
-            display: flex;
+        input, 
 
-            justify-content: space-between;
+ 
 
-            padding: 10px 12px;
+        select { 
 
-            margin-bottom: 8px;
+ 
 
-            border-radius: 12px;
+            width: 100%; 
 
-            background: white;
+ 
 
-            border-left: 5px solid var(--primary-color);
+            padding: 12px 16px; 
 
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+ 
 
-            font-size: 0.97rem;
+            border-radius: 12px; 
 
-        }
+ 
 
+            border: 2px solid transparent; 
 
+ 
 
-        .fee-item.highlight {
+            background: #f9fafb; 
 
-            border-left-color: var(--accent-color);
+ 
 
-            background: #ebf8ff;
+            font-size: 1rem; 
 
-        }
+ 
 
+            color: #1f2937; 
 
+ 
 
-        .fee-item.total {
+            font-family: inherit; 
 
-            font-weight: 700;
+ 
 
-            font-size: 1.05rem;
+            transition: all 0.3s ease; 
 
-            border-left-color: var(--secondary-color);
+ 
 
-            background: #f0f4ff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); 
 
-        }
+ 
 
+        } 
 
+ 
 
-        .fee-item span.value {
+ 
 
-            font-weight: 700;
+ 
 
-        }
+        input:focus, 
 
+ 
 
+        select:focus { 
 
-        .fee-item span.desc {
+ 
 
-            font-weight: normal;
+            outline: none; 
 
-        }
+ 
 
+            border-color: var(--primary-color); 
 
+ 
 
-        @keyframes fadeIn {
+            box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2); 
 
-            from {
+ 
 
-                opacity: 0;
+        } 
 
-                transform: translateY(10px);
+ 
 
-            }
+ 
 
+ 
 
+        select { 
 
-            to {
+ 
 
-                opacity: 1;
+            cursor: pointer; 
 
-                transform: translateY(0);
+ 
 
-            }
+            appearance: none; 
 
-        }
+ 
 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); 
 
+ 
 
-        .grid-2 {
+            background-repeat: no-repeat; 
 
-            display: grid;
+ 
 
-            grid-template-columns: 1fr 1fr;
+            background-position: right 16px center; 
 
-            gap: 15px;
+ 
 
-        }
+            background-size: 20px; 
 
+ 
 
+        } 
 
-        @media (max-width: 480px) {
+ 
 
-            .grid-2 {
+ 
 
-                grid-template-columns: 1fr;
+ 
 
-            }
+        button { 
 
+ 
 
+            margin-top: 10px; 
 
-            .calculator-container {
+ 
 
-                padding: 25px;
+            width: 48%; 
 
-            }
+ 
 
+            padding: 14px; 
 
+ 
 
-            button {
+            background: var(--primary-color); 
 
-                width: 100%;
+ 
 
-            }
+            color: white; 
 
-        }
-    </style>
+ 
 
-</head>
+            font-size: 1.1rem; 
 
+ 
 
+            font-weight: 600; 
 
-<body>
+ 
 
+            border: none; 
 
+ 
 
-    <div class="calculator-container">
+            border-radius: 12px; 
 
-        <h2>Fee Calculator</h2>
+ 
 
+            cursor: pointer; 
 
+ 
 
-        <div class="grid-2">
+            transition: transform 0.2s, box-shadow 0.2s; 
 
-            <div class="form-group">
+ 
 
-                <label>System</label>
+            box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3); 
 
-                <select id="system">
+ 
 
-                    <option value="gtm">Global Trade Master</option>
+        } 
 
-                    <option value="gi">Global Invest</option>
+ 
 
-                </select>
+ 
 
-            </div>
+ 
 
+        button:hover { 
 
+ 
 
-            <div class="form-group">
+            transform: translateY(-2px); 
 
-                <label>Market</label>
+ 
 
-                <select id="market">
+            box-shadow: 0 8px 20px rgba(30, 144, 255, 0.4); 
 
-                    <option value="us">United States (US)</option>
+ 
 
-                    <option value="hk">Hong Kong (HK)</option>
+        } 
 
-                    <option value="vn">Vietnam (VN)</option>
+ 
 
-                </select>
+ 
 
-            </div>
+ 
 
-        </div>
+        button:active { 
 
+ 
 
+            transform: translateY(0); 
 
-        <div class="grid-2">
+ 
 
-            <div class="form-group">
+        } 
 
-                <label>Asset Type</label>
+ 
 
-                <select id="type">
+ 
 
-                    <option value="stock">Stock</option>
+ 
 
-                    <option value="etf">ETF</option>
+        .result { 
 
-                </select>
+ 
 
-            </div>
+            margin-top: 30px; 
 
-            <div class="form-group">
+ 
 
-                <label>Session</label>
+            background: var(--fee-bg); 
 
-                <select id="session">
+ 
 
-                    <option value="normal">Normal Market</option>
+            padding: 20px; 
 
-                    <option value="prepost">Pre/Post/Overnight</option>
+ 
 
-                </select>
+            border-radius: 16px; 
 
-            </div>
+ 
 
-        </div>
+            border: 1px solid var(--fee-border); 
 
+ 
 
+            animation: fadeIn 0.5s ease-out; 
 
-        <div class="form-group">
+ 
 
-            <label>Price per Share</label>
+            display: none; 
 
-            <input type="number" id="price" placeholder="e.g. 150.00" step="0.01">
+ 
 
-        </div>
+        } 
 
+ 
 
+ 
 
-        <div class="form-group">
+ 
 
-            <label>Quantity</label>
+        .result.visible { 
 
-            <input type="number" id="quantity" placeholder="e.g. 100">
+ 
 
-        </div>
+            display: block; 
 
+ 
 
+        } 
 
-        <div class="grid-2">
+ 
 
-            <button onclick="calculate('buy')">Buy</button>
+ 
 
-            <button onclick="calculate('sell')">Sell</button>
+ 
 
-        </div>
+        .fee-item { 
 
+ 
 
+            display: flex; 
 
-        <div class="result" id="result"></div>
+ 
 
-    </div>
+            justify-content: space-between; 
 
+ 
 
+            padding: 10px 12px; 
 
-    <script>
+ 
 
-        const marketSelect = document.getElementById("market");
+            margin-bottom: 8px; 
 
-        const sessionSelect = document.getElementById("session");
+ 
 
+            border-radius: 12px; 
 
+ 
 
-        function updateSessionOptions() {
+            background: white; 
 
-            const market = marketSelect.value;
+ 
 
-            for (let i = 0; i < sessionSelect.options.length; i++) {
+            border-left: 5px solid var(--primary-color); 
 
-                sessionSelect.options[i].disabled = false;
+ 
 
-            }
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); 
 
-            if (market === "hk" || market === "vn") {
+ 
 
-                for (let i = 0; i < sessionSelect.options.length; i++) {
+            font-size: 0.97rem; 
 
-                    if (sessionSelect.options[i].value === "prepost") {
+ 
 
-                        sessionSelect.options[i].disabled = true;
+        } 
 
-                    }
+ 
 
-                }
+ 
 
-                sessionSelect.value = "normal";
+ 
 
-            }
+        .fee-item.highlight { 
 
-        }
+ 
 
+            border-left-color: var(--accent-color); 
 
+ 
 
-        marketSelect.addEventListener("change", updateSessionOptions);
+            background: #ebf8ff; 
 
-        window.addEventListener("load", updateSessionOptions);
+ 
 
+        } 
 
+ 
 
-        function calculate(action) {
+ 
 
-            const system = document.getElementById("system").value;
+ 
 
-            const market = document.getElementById("market").value;
+        .fee-item.total { 
 
-            const type = document.getElementById("type").value;
+ 
 
-            const price = parseFloat(document.getElementById("price").value);
+            font-weight: 700; 
 
-            const quantity = parseFloat(document.getElementById("quantity").value);
+ 
 
-            const session = document.getElementById("session").value;
+            font-size: 1.05rem; 
 
-            const resultDiv = document.getElementById("result");
+ 
 
+            border-left-color: var(--secondary-color); 
 
+ 
 
-            if (!price || !quantity) {
+            background: #f0f4ff; 
 
-                alert("Please enter both Price and Quantity.");
+ 
 
-                return;
+        } 
 
-            }
+ 
 
+ 
 
+ 
 
-            const orderValue = price * quantity;
+        .fee-item span.value { 
 
-            let totalFee = 0;
+ 
 
-            let details = [];
+            font-weight: 700; 
 
+ 
 
+        } 
 
-            function createItem(label, value, highlight = false, isTotal = false) {
+ 
 
-                const match = value.match(/^([^\(]+)(.*)$/);
+ 
 
-                let numPart = match ? match[1].trim() : value;
+ 
 
-                let descPart = match && match[2] ? match[2].trim() : '';
+        .fee-item span.desc { 
 
-                return `<div class="fee-item${highlight ? ' highlight' : ''}${isTotal ? ' total' : ''}"> 
+ 
 
-                            <span>${label}</span> 
+            font-weight: normal; 
 
-                            <span class="value">${numPart} <span class="desc">${descPart}</span></span> 
+ 
 
-                        </div>`;
+        } 
 
-            }
+ 
 
+ 
 
+ 
 
-            // --- US --- 
+        @keyframes fadeIn { 
 
-            if (market === "us") {
+ 
 
-                let fee;
+            from { 
 
-                let minFeeApplied = false;
+ 
 
-                if (system === "gtm") {
+                opacity: 0; 
 
-                    if (quantity < 1) {
+ 
 
-                        fee = 1;
+                transform: translateY(10px); 
 
-                    } else {
+ 
 
-                        fee = Math.max(0.08 * quantity, 3);
+            } 
 
-                        minFeeApplied = fee === 3;
+ 
 
-                    }
+ 
 
-                } else {
+ 
 
-                    fee = Math.max(0.08 * quantity, 10);
+            to { 
 
-                    minFeeApplied = fee === 10;
+ 
 
-                }
+                opacity: 1; 
 
-                totalFee += fee;
+ 
 
-                details.push(createItem("Main Fee", `$${fee.toFixed(2)} (0.08 USD per share${minFeeApplied ? ', ติด Min Fee' : ''})`));
+                transform: translateY(0); 
 
+ 
 
+            } 
 
-                if (session === "prepost" && system === "gtm") {
+ 
 
-                    let ecnFee = 0.00001 * quantity;
+        } 
 
-                    totalFee += ecnFee;
+ 
 
-                    details.push(createItem("Trading Fee (ECN Fee)", `$${ecnFee.toFixed(2)} (0.00001 USD per share for Pre/Post/Overnight)`, true));
+ 
 
-                }
+ 
 
+        .grid-2 { 
 
+ 
 
-                if (action === "sell" && system === "gtm") {
+            display: grid; 
 
-                    let minTAFfee = 0.01;
+ 
 
-                    let maxTAFfee = 9.79;
+            grid-template-columns: 1fr 1fr; 
 
-                    let taf = Math.min(Math.max(0.000195 * quantity, minTAFfee), maxTAFfee);
+ 
 
-                    totalFee += taf;
+            gap: 15px; 
 
-                    details.push(createItem("TAF Fee", `$${taf.toFixed(2)} (0.000195 USD per share)`));
+ 
 
-                }
+        } 
 
+ 
 
+ 
 
-                let vat = fee * 0.07;
+ 
 
-                totalFee += vat;
+        @media (max-width: 480px) { 
 
-                details.push(createItem("VAT 7%", `$${vat.toFixed(2)} (7% on main fee)`));
+ 
 
-            }
+            .grid-2 { 
 
+ 
 
+                grid-template-columns: 1fr; 
 
-            // --- HK --- 
+ 
 
-            else if (market === "hk") {
+            } 
 
-                let minFee = system === "gtm" ? 50 : 150;
+ 
 
-                let rate = 0.002;
+ 
 
-                let commission = Math.max(orderValue * rate, minFee);
+ 
 
-                let minFeeApplied = commission === minFee;
+            .calculator-container { 
 
-                totalFee += commission;
+ 
 
-                let vat = commission * 0.07;
+                padding: 25px; 
 
-                totalFee += vat;
+ 
 
+            } 
 
+ 
 
-                details.push(createItem("Main Fee", `HK$${commission.toFixed(2)} (${(rate * 100).toFixed(2)}% of order value, min ${minFee} HKD${minFeeApplied ? ', ติด Min Fee' : ''})`));
+ 
 
-                details.push(createItem("VAT 7%", `HK$${vat.toFixed(2)} (7% on main fee/min fee)`));
+ 
 
+            button { 
 
+ 
 
-                if (type === "stock") {
+                width: 100%; 
 
-                    let stamp = 0.001 * orderValue;
+ 
 
-                    totalFee += stamp;
+            } 
 
-                    details.push(createItem("Stamp Duty", `HK$${stamp.toFixed(2)} (0.1% of order value)`));
+ 
 
-                }
+        } 
 
+    </style> 
 
+ 
 
-                let exchangeFee = 0.000085 * orderValue;
+</head> 
 
-                totalFee += exchangeFee;
+ 
 
-                details.push(createItem("Exchange Fee", `HK$${exchangeFee.toFixed(2)} (0.0085% of order value)`));
+ 
 
+ 
 
+<body> 
 
-                if (system === "gtm") {
+ 
 
-                    let settlementFee = 0.000042 * orderValue;
+ 
 
-                    totalFee += settlementFee;
+ 
 
-                    details.push(createItem("Stock Settlement Fee", `HK$${settlementFee.toFixed(2)} (0.0042% of order value)`));
+    <div class="calculator-container"> 
 
-                }
+ 
 
-            }
+        <h2>Fee Calculator</h2> 
 
+ 
 
+ 
 
-            // --- Vietnam --- 
+ 
 
-            else if (market === "vn") {
+        <div class="grid-2"> 
 
-                let commission = system === "gtm" ? Math.max(0.004 * orderValue, 300000) : 0.0045 * orderValue;
+ 
 
-                let minFeeApplied = system === "gtm" && commission === 300000;
+            <div class="form-group"> 
 
-                totalFee += commission;
+ 
 
-                details.push(createItem("Main Fee", `VND ${commission.toFixed(0)} (${(commission / orderValue * 100).toFixed(2)}% of order value${minFeeApplied ? ', ติด Min Fee' : ''})`));
+                <label>System</label> 
 
+ 
 
+                <select id="system"> 
 
-                let others = 0;
+ 
 
-                if (type === "stock" && action === "sell") {
+                    <option value="gtm">Global Trade Master</option> 
 
-                    let tax = 0.001 * orderValue;
+ 
 
-                    others += tax;
+                    <option value="gi">Global Invest</option> 
 
-                    details.push(createItem("Selling Tax", `VND ${tax.toFixed(0)} (0.1% of order value)`, true));
+ 
 
-                }
+                </select> 
 
-                let trans = 0.0003 * orderValue;
+ 
 
-                others += trans;
+            </div> 
 
-                details.push(createItem("Transaction Fee", `VND ${trans.toFixed(0)} (0.03% of order value)`));
+ 
 
+ 
 
+ 
 
-                totalFee += others;
+            <div class="form-group"> 
 
-                let vat = commission * 0.07;
+ 
 
-                totalFee += vat;
+                <label>Market</label> 
 
-                details.push(createItem("VAT 7%", `VND ${vat.toFixed(0)} (7% on main fee)`));
+ 
 
-            }
+                <select id="market"> 
 
+ 
 
+                    <option value="us">United States (US)</option> 
 
-            details.unshift(createItem("Order Value", `${market === 'vn' ? 'VND ' : market === 'hk' ? 'HK$' : '$'}${orderValue.toLocaleString()}`));
+ 
 
+                    <option value="hk">Hong Kong (HK)</option> 
 
+ 
 
-            let finalTotal = action === 'buy' ? orderValue + totalFee : orderValue - totalFee;
+                    <option value="vn">Vietnam (VN)</option> 
 
-            details.push(createItem(`Total ${action === 'buy' ? 'Cost' : 'Proceeds'}`, `${market === 'vn' ? 'VND ' : market === 'hk' ? 'HK$' : '$'}${finalTotal.toLocaleString()}`, true, true));
+ 
 
+                </select> 
 
+ 
 
-            resultDiv.innerHTML = details.join("");
+            </div> 
 
-            resultDiv.classList.add('visible');
+ 
 
-        }
+        </div> 
 
-    </script>
+ 
 
+ 
 
+ 
 
-</body>
+        <div class="grid-2"> 
 
+ 
 
+            <div class="form-group"> 
 
-</html>
+ 
+
+                <label>Asset Type</label> 
+
+ 
+
+                <select id="type"> 
+
+ 
+
+                    <option value="stock">Stock</option> 
+
+ 
+
+                    <option value="etf">ETF</option> 
+
+ 
+
+                </select> 
+
+ 
+
+            </div> 
+
+ 
+
+            <div class="form-group"> 
+
+ 
+
+                <label>Session</label> 
+
+ 
+
+                <select id="session"> 
+
+ 
+
+                    <option value="normal">Normal Market</option> 
+
+ 
+
+                    <option value="prepost">Pre/Post/Overnight</option> 
+
+ 
+
+                </select> 
+
+ 
+
+            </div> 
+
+ 
+
+        </div> 
+
+ 
+
+ 
+
+ 
+
+        <div class="form-group"> 
+
+ 
+
+            <label>Price per Share</label> 
+
+ 
+
+            <input type="number" id="price" placeholder="e.g. 150.00" step="0.01"> 
+
+ 
+
+        </div> 
+
+ 
+
+ 
+
+ 
+
+        <div class="form-group"> 
+
+ 
+
+            <label>Quantity</label> 
+
+ 
+
+            <input type="number" id="quantity" placeholder="e.g. 100"> 
+
+ 
+
+        </div> 
+
+ 
+
+ 
+
+ 
+
+        <div class="grid-2"> 
+
+ 
+
+            <button onclick="calculate('buy')">Buy</button> 
+
+ 
+
+            <button onclick="calculate('sell')">Sell</button> 
+
+ 
+
+        </div> 
+
+ 
+
+ 
+
+ 
+
+        <div class="result" id="result"></div> 
+
+ 
+
+    </div> 
+
+ 
+
+ 
+
+ 
+
+    <script> 
+
+ 
+
+        const marketSelect = document.getElementById("market"); 
+
+ 
+
+        const sessionSelect = document.getElementById("session"); 
+
+ 
+
+ 
+
+ 
+
+        function updateSessionOptions() { 
+
+ 
+
+            const market = marketSelect.value; 
+
+ 
+
+            for (let i = 0; i < sessionSelect.options.length; i++) { 
+
+ 
+
+                sessionSelect.options[i].disabled = false; 
+
+ 
+
+            } 
+
+ 
+
+            if (market === "hk" || market === "vn") { 
+
+ 
+
+                for (let i = 0; i < sessionSelect.options.length; i++) { 
+
+ 
+
+                    if (sessionSelect.options[i].value === "prepost") { 
+
+ 
+
+                        sessionSelect.options[i].disabled = true; 
+
+ 
+
+                    } 
+
+ 
+
+                } 
+
+ 
+
+                sessionSelect.value = "normal"; 
+
+ 
+
+            } 
+
+ 
+
+        } 
+
+ 
+
+ 
+
+ 
+
+        marketSelect.addEventListener("change", updateSessionOptions); 
+
+ 
+
+        window.addEventListener("load", updateSessionOptions); 
+
+ 
+
+ 
+
+ 
+
+        function calculate(action) { 
+
+ 
+
+            const system = document.getElementById("system").value; 
+
+ 
+
+            const market = document.getElementById("market").value; 
+
+ 
+
+            const type = document.getElementById("type").value; 
+
+ 
+
+            const price = parseFloat(document.getElementById("price").value); 
+
+ 
+
+            const quantity = parseFloat(document.getElementById("quantity").value); 
+
+ 
+
+            const session = document.getElementById("session").value; 
+
+ 
+
+            const resultDiv = document.getElementById("result"); 
+
+ 
+
+ 
+
+ 
+
+            if (!price || !quantity) { 
+
+ 
+
+                alert("Please enter both Price and Quantity."); 
+
+ 
+
+                return; 
+
+ 
+
+            } 
+
+ 
+
+ 
+
+ 
+
+            const orderValue = price * quantity; 
+
+ 
+
+            let totalFee = 0; 
+
+ 
+
+            let details = []; 
+
+ 
+
+ 
+
+ 
+
+            function createItem(label, value, highlight = false, isTotal = false) { 
+
+ 
+
+                const match = value.match(/^([^\(]+)(.*)$/); 
+
+ 
+
+                let numPart = match ? match[1].trim() : value; 
+
+ 
+
+                let descPart = match && match[2] ? match[2].trim() : ''; 
+
+ 
+
+                return `<div class="fee-item${highlight ? ' highlight' : ''}${isTotal ? ' total' : ''}">  
+
+ 
+
+                            <span>${label}</span>  
+
+ 
+
+                            <span class="value">${numPart} <span class="desc">${descPart}</span></span>  
+
+ 
+
+                        </div>`; 
+
+ 
+
+            } 
+
+ 
+
+ 
+
+ 
+
+            // --- US ---  
+
+ 
+
+            if (market === "us") { 
+
+ 
+
+                let fee; 
+
+ 
+
+                let minFeeApplied = false; 
+
+ 
+
+                if (system === "gtm") { 
+
+ 
+
+                    if (quantity < 1) { 
+
+ 
+
+                        fee = 1; 
+
+ 
+
+                    } else { 
+
+ 
+
+                        fee = Math.max(0.08 * quantity, 3); 
+
+ 
+
+                        minFeeApplied = fee === 3; 
+
+ 
+
+                    } 
+
+ 
+
+                } else { 
+
+ 
+
+                    fee = Math.max(0.08 * quantity, 10); 
+
+ 
+
+                    minFeeApplied = fee === 10; 
+
+ 
+
+                } 
+
+ 
+
+                totalFee += fee; 
+
+ 
+
+                details.push(createItem("Main Fee", `$${fee.toFixed(2)} (0.08 USD per share${minFeeApplied ? ', ติด Min Fee' : ''})`)); 
+
+ 
+
+ 
+
+ 
+
+                if (session === "prepost" && system === "gtm") { 
+
+ 
+
+                    let ecnFee = 0.00001 * quantity; 
+
+ 
+
+                    totalFee += ecnFee; 
+
+ 
+
+                    details.push(createItem("Trading Fee (ECN Fee)", `$${ecnFee.toFixed(2)} (0.00001 USD per share for Pre/Post/Overnight)`, true)); 
+
+ 
+
+                } 
+
+ 
+
+ 
+
+ 
+
+                if (action === "sell" && system === "gtm") { 
+
+ 
+
+                    let minTAFfee = 0.01; 
+
+ 
+
+                    let maxTAFfee = 9.79; 
+
+ 
+
+                    let taf = Math.min(Math.max(0.000195 * quantity, minTAFfee), maxTAFfee); 
+
+ 
+
+                    totalFee += taf; 
+
+ 
+
+                    details.push(createItem("TAF Fee", `$${taf.toFixed(2)} (0.000195 USD per share)`)); 
+
+ 
+
+                } 
+
+ 
+
+ 
+
+ 
+
+                let vat = fee * 0.07; 
+
+ 
+
+                totalFee += vat; 
+
+ 
+
+                details.push(createItem("VAT 7%", `$${vat.toFixed(2)} (7% on main fee)`)); 
+
+ 
+
+            } 
+
+ 
+
+ 
+
+ 
+
+            // --- HK ---  
+
+ 
+
+            else if (market === "hk") { 
+
+ 
+
+                let minFee = system === "gtm" ? 50 : 150; 
+
+ 
+
+                let rate = 0.002; 
+
+ 
+
+                let commission = Math.max(orderValue * rate, minFee); 
+
+ 
+
+                let minFeeApplied = commission === minFee; 
+
+ 
+
+                totalFee += commission; 
+
+ 
+
+                let vat = commission * 0.07; 
+
+ 
+
+                totalFee += vat; 
+
+ 
+
+ 
+
+ 
+
+                details.push(createItem("Main Fee", `HK$${commission.toFixed(2)} (${(rate * 100).toFixed(2)}% of order value, min ${minFee} HKD${minFeeApplied ? ', ติด Min Fee' : ''})`)); 
+
+ 
+
+                details.push(createItem("VAT 7%", `HK$${vat.toFixed(2)} (7% on main fee/min fee)`)); 
+
+ 
+
+ 
+
+ 
+
+                if (type === "stock") { 
+
+ 
+
+                    let stamp = 0.001 * orderValue; 
+
+ 
+
+                    totalFee += stamp; 
+
+ 
+
+                    details.push(createItem("Stamp Duty", `HK$${stamp.toFixed(2)} (0.1% of order value)`)); 
+
+ 
+
+                } 
+
+ 
+
+ 
+
+ 
+
+                let exchangeFee = 0.000085 * orderValue; 
+
+ 
+
+                totalFee += exchangeFee; 
+
+ 
+
+                details.push(createItem("Exchange Fee", `HK$${exchangeFee.toFixed(2)} (0.0085% of order value)`)); 
+
+ 
+
+ 
+
+ 
+
+                if (system === "gtm") { 
+
+ 
+
+                    let settlementFee = 0.000042 * orderValue; 
+
+ 
+
+                    totalFee += settlementFee; 
+
+ 
+
+                    details.push(createItem("Stock Settlement Fee", `HK$${settlementFee.toFixed(2)} (0.0042% of order value)`)); 
+
+ 
+
+                } 
+
+ 
+
+            } 
+
+ 
+
+ 
+
+ 
+
+           // --- Vietnam ---  
+
+            
+
+else if (market === "vn") { 
+
+ 
+
+    let rate = system === "gtm" ? 0.004 : 0.0045; 
+
+     
+
+    let minFee = system === "gtm" ? 300000 : 0; 
+
+ 
+
+    let commission = Math.max(orderValue * rate, minFee); 
+
+ 
+
+    let minFeeApplied = commission === minFee && minFee > 0; 
+
+ 
+
+    totalFee += commission; 
+
+ 
+
+    details.push(createItem( 
+
+        "Main Fee", 
+
+        `VND ${commission.toFixed(0)} (${(rate * 100).toFixed(2)}% of order value${minFeeApplied ? ', ติด Min Fee 300,000 VND' : ''})` 
+
+    )); 
+
+ 
+
+ 
+
+ 
+
+                let others = 0; 
+
+ 
+
+                if (type === "stock" && action === "sell") { 
+
+ 
+
+                    let tax = 0.001 * orderValue; 
+
+ 
+
+                    others += tax; 
+
+ 
+
+                    details.push(createItem("Selling Tax", `VND ${tax.toFixed(0)} (0.1% of order value)`, true)); 
+
+ 
+
+                } 
+
+ 
+
+                // Transaction Fee (เฉพาะ GTM) 
+
+                 
+
+if (system === "gtm") { 
+
+ 
+
+    let trans = 0.0003 * orderValue; 
+
+     
+
+    others += trans; 
+
+     
+
+    details.push(createItem("Transaction Fee", `VND ${trans.toFixed(0)} (0.03% of order value)`)); 
+
+     
+
+} 
+
+ 
+
+ 
+
+ 
+
+                totalFee += others; 
+
+ 
+
+                let vat = commission * 0.07; 
+
+ 
+
+                totalFee += vat; 
+
+ 
+
+                details.push(createItem("VAT 7%", `VND ${vat.toFixed(0)} (7% on main fee)`)); 
+
+ 
+
+            } 
+
+ 
+
+ 
+
+ 
+
+            details.unshift(createItem("Order Value", `${market === 'vn' ? 'VND ' : market === 'hk' ? 'HK$' : '$'}${orderValue.toLocaleString()}`)); 
+
+ 
+
+ 
+
+ 
+
+            let finalTotal = action === 'buy' ? orderValue + totalFee : orderValue - totalFee; 
+
+ 
+
+            details.push(createItem(`Total ${action === 'buy' ? 'Cost' : 'Proceeds'}`, `${market === 'vn' ? 'VND ' : market === 'hk' ? 'HK$' : '$'}${finalTotal.toLocaleString()}`, true, true)); 
+
+ 
+
+ 
+
+ 
+
+            resultDiv.innerHTML = details.join(""); 
+
+ 
+
+            resultDiv.classList.add('visible'); 
+
+ 
+
+        } 
+
+ 
+
+    </script> 
+
+ 
+
+ 
+
+ 
+
+</body> 
+
+ 
+
+ 
+
+ 
+
+</html> 
